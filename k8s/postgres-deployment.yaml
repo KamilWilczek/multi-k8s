@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+    # connection to database-persistent-volume-claim
+      volumes:
+      # name for volume
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
+      containers:
+      - name: postgres
+        image: postgres
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        # name of the variable
+          - name: POSTGRES_PASSWORD
+          # value of the variable
+            valueFrom:
+              secretKeyRef:
+                name: pgpassword
+                key: PGPASSWORD
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          # name of the volume that will be assigned
+          - name: postgres-storage
+          # path where volume has to be
+            mountPath: /var/lib/postgresql/data
+            # mkdir in given path
+            subPath: postgres
