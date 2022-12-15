@@ -8,7 +8,7 @@ env:
 before_install:
   - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
   # 1. Install Google Cloud SDK CLI
-  - curl https://sdl.cloud.google.com | bash > /dev/null;
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
   - source $HOME/google-cloud-sdk/path.bash.inc
   # 2. Configure the SDK with out Google Cloud auth info
   - gcloud components update kubectl
